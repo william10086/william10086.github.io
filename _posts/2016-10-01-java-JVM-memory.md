@@ -8,11 +8,10 @@ tags:  JVM memory
 * content
 {:toc}
 
-## 问题描述
-
-**
 JVM内存模型中的基本概念
-**
+
+
+
 
 ![jVM内存模型](http://img.blog.csdn.net/20131231175136859?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQva2luZ29md29ybGQ=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
