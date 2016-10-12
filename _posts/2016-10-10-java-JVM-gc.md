@@ -118,7 +118,8 @@ tags:  JVM GC 垃圾回收
 ![jvm-collector](http://upload-images.jianshu.io/upload_images/650075-8c5080659578032d.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 **1.Serial收集器**
-	Serial收集器是最基本、发展历史最悠久的收集器，曾经（在JDK 1.3.1之前）是虚拟机新生代收集的唯一选择。
+
+Serial收集器是最基本、发展历史最悠久的收集器，曾经（在JDK 1.3.1之前）是虚拟机新生代收集的唯一选择。
 
 ![serial收集器](http://upload-images.jianshu.io/upload_images/650075-ad2db11e4506ceab.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
