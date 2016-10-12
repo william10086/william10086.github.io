@@ -88,6 +88,7 @@ tags:  JVM GC 垃圾回收
 
 2.复制（Copying）
 	此算法把内存空间划为两个相等的区域，每次只使用其中一个区域。垃圾回收时，遍历当前使用区域，把正在使用中的对象复制到另外一个区域中。此算法每次只处理正在使用中的对象，因此复制成本比较小，同时复制过去以后还能进行相应的内存整理，不会出现“碎片”问题。当然，此算法的缺点也是很明显的，就是需要两倍内存空间。
+
 ![copying](http://img.blog.csdn.net/20150315165927137?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdG9ueXRmamluZw==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
 
 3.标记-压缩整理（Mark-Compact）
@@ -116,13 +117,16 @@ tags:  JVM GC 垃圾回收
 
 **1.Serial收集器**
 	Serial收集器是最基本、发展历史最悠久的收集器，曾经（在JDK 1.3.1之前）是虚拟机新生代收集的唯一选择。
+
 ![serial收集器](http://upload-images.jianshu.io/upload_images/650075-ad2db11e4506ceab.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 特性： 这个收集器是一个单线程的收集器，但它的“单线程”的意义并不仅仅说明它只会使用一个CPU或一条收集线程去完成垃圾收集工作，更重要的是在它进行垃圾收集时，必须暂停其他所有的工作线程，直到它收集结束。Stop The World
 应用场景： Serial收集器是虚拟机运行在Client模式下的默认新生代收集器。
 优势： 简单而高效（与其他收集器的单线程比），对于限定单个CPU的环境来说，Serial收集器由于没有线程交互的开销，专心做垃圾收集自然可以获得最高的单线程收集效率。
 
 **2.ParNew收集器**
 ![parnew](http://upload-images.jianshu.io/upload_images/650075-483c1885e2d36f65.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 特性： ParNew收集器其实就是Serial收集器的多线程版本，除了使用多条线程进行垃圾收集之外，其余行为包括Serial收集器可用的所有控制参数、收集算法、Stop The World、对象分配规则、回收策略等都与Serial收集器完全一样，在实现上，这两种收集器也共用了相当多的代码。
 应用场景： ParNew收集器是许多运行在Server模式下的虚拟机中首选的新生代收集器。
 很重要的原因是：除了Serial收集器外，目前只有它能与CMS收集器配合工作。在JDK 1.5时期，HotSpot推出了一款在强交互应用中几乎可认为有划时代意义的垃圾收集器——CMS收集器，这款收集器是HotSpot虚拟机中第一款真正意义上的并发收集器，它第一次实现了让垃圾收集线程与用户线程同时工作。不幸的是，CMS作为老年代的收集器，却无法与JDK 1.4.0中已经存在的新生代收集器Parallel Scavenge配合工作，所以在JDK 1.5中使用CMS来收集老年代的时候，新生代只能选择ParNew或者Serial收集器中的一个。
@@ -131,6 +135,7 @@ Serial收集器 VS ParNew收集器：
 	ParNew收集器在单CPU的环境中绝对不会有比Serial收集器更好的效果，甚至由于存在线程交互的开销，该收集器在通过超线程技术实现的两个CPU的环境中都不能百分之百地保证可以超越Serial收集器。然而，随着可以使用的CPU的数量的增加，它对于GC时系统资源的有效利用还是很有好处的。
 
 **3.Parallel Scavenge收集器**
+
 特性： Parallel Scavenge收集器是一个新生代收集器，它也是使用复制算法的收集器，又是并行的多线程收集器。
 应用场景： 停顿时间越短就越适合需要与用户交互的程序，良好的响应速度能提升用户体验，而高吞吐量则可以高效率地利用CPU时间，尽快完成程序的运算任务，主要适合在后台运算而不需要太多交互的任务。
 
@@ -144,19 +149,25 @@ GC自适应的调节策略：
 	Parallel Scavenge收集器有一个参数-XX:+UseAdaptiveSizePolicy。当这个参数打开之后，就不需要手工指定新生代的大小、Eden与Survivor区的比例、晋升老年代对象年龄等细节参数了，虚拟机会根据当前系统的运行情况收集性能监控信息，动态调整这些参数以提供最合适的停顿时间或者最大的吞吐量，这种调节方式称为GC自适应的调节策略（GC Ergonomics）。
 
 **4.Serial Old收集器**
+
 ![serial old](http://upload-images.jianshu.io/upload_images/650075-a877eba6d1753013.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 特性： Serial Old是Serial收集器的老年代版本，它同样是一个单线程收集器，使用标记－整理算法。
 应用场景：Client模式 Serial Old收集器的主要意义也是在于给Client模式下的虚拟机使用。 Server模式 如果在Server模式下，那么它主要还有两大用途：一种用途是在JDK 1.5以及之前的版本中与Parallel Scavenge收集器搭配使用，另一种用途就是作为CMS收集器的后备预案，在并发收集发生Concurrent Mode Failure时使用。
 
 **5.Parallel Old收集器**
+
 ![parallel old](http://upload-images.jianshu.io/upload_images/650075-0f74222185d67afc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 特性： Parallel Old是Parallel Scavenge收集器的老年代版本，使用多线程和“标记－整理”算法。
 应用场景： 在注重吞吐量以及CPU资源敏感的场合，都可以优先考虑Parallel Scavenge加Parallel Old收集器。
 
 	这个收集器是在JDK 1.6中才开始提供的，在此之前，新生代的Parallel Scavenge收集器一直处于比较尴尬的状态。原因是，如果新生代选择了Parallel Scavenge收集器，老年代除了Serial Old收集器外别无选择（Parallel Scavenge收集器无法与CMS收集器配合工作）。由于老年代Serial Old收集器在服务端应用性能上的“拖累”，使用了Parallel Scavenge收集器也未必能在整体应用上获得吞吐量最大化的效果，由于单线程的老年代收集中无法充分利用服务器多CPU的处理能力，在老年代很大而且硬件比较高级的环境中，这种组合的吞吐量甚至还不一定有ParNew加CMS的组合“给力”。直到Parallel Old收集器出现后，“吞吐量优先”收集器终于有了比较名副其实的应用组合。
 
 **6.CMS收集器**
+
 特性：CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时间为目标的收集器。目前很大一部分的Java应用集中在互联网站或者B/S系统的服务端上，这类应用尤其重视服务的响应速度，希望系统停顿时间最短，以给用户带来较好的体验。CMS收集器就非常符合这类应用的需求。
+
 ![cms](http://upload-images.jianshu.io/upload_images/650075-b50cffd6ed9e15df.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 CMS收集器是基于“标记—清除”算法实现的，它的运作过程相对于前面几种收集器来说更复杂一些，整个过程分为4个步骤：
@@ -179,7 +190,9 @@ CMS收集器会产生大量空间碎片
 	CMS是一款基于“标记—清除”算法实现的收集器，这意味着收集结束时会有大量空间碎片产生。空间碎片过多时，将会给大对象分配带来很大麻烦，往往会出现老年代还有很大空间剩余，但是无法找到足够大的连续空间来分配当前对象，不得不提前触发一次Full GC。
 
 **7.G1收集器**
+
 ![g1](http://upload-images.jianshu.io/upload_images/650075-6c9c9253495eb757.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 G1（Garbage-First）是一款面向服务端应用的垃圾收集器。HotSpot开发团队赋予它的使命是未来可以替换掉JDK 1.5中发布的CMS收集器。与其他GC收集器相比，G1具备如下特点。
 *并行与并发*	G1能充分利用多CPU、多核环境下的硬件优势，使用多个CPU来缩短Stop-The-World停顿的时间，部分其他收集器原本需要停顿Java线程执行的GC动作，G1收集器仍然可以通过并发的方式让Java程序继续执行。
 
