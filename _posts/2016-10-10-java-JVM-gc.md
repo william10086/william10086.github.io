@@ -125,7 +125,8 @@ tags:  JVM GC 垃圾回收
 优势： 简单而高效（与其他收集器的单线程比），对于限定单个CPU的环境来说，Serial收集器由于没有线程交互的开销，专心做垃圾收集自然可以获得最高的单线程收集效率。
 
 **2.ParNew收集器**
-![parnew](http://upload-images.jianshu.io/upload_images/650075-483c1885e2d36f65.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+![ParNew](http://upload-images.jianshu.io/upload_images/650075-483c1885e2d36f65.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 特性： ParNew收集器其实就是Serial收集器的多线程版本，除了使用多条线程进行垃圾收集之外，其余行为包括Serial收集器可用的所有控制参数、收集算法、Stop The World、对象分配规则、回收策略等都与Serial收集器完全一样，在实现上，这两种收集器也共用了相当多的代码。
 应用场景： ParNew收集器是许多运行在Server模式下的虚拟机中首选的新生代收集器。
