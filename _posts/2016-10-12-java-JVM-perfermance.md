@@ -8,7 +8,6 @@ tags:  JVM 性能优化
 * content
 {:toc}
 
-## 问题描述
 
 ##### JVM性能调优参数、过程和实例
 

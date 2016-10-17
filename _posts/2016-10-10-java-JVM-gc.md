@@ -8,7 +8,6 @@ tags:  JVM GC 垃圾回收
 * content
 {:toc}
 
-## 问题描述
 
 ##### JVM垃圾收集(gc)过程、JVM垃圾收集算法、JVM垃圾收集器
 
