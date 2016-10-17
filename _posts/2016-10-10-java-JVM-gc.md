@@ -14,8 +14,6 @@ tags:  JVM GC 垃圾回收
 
 
 
-## 解决方案
-
 #### 1、GC过程
 	在讲述GC过程前我先解释一下JVM的两个控制参数：-XX:TargetSurvivorRatio ---Survivor Space最大使用率，若存放对象的总大小超过该值，将引起对象向Old区迁移；-XX:MaxTenuringThreshold ---Young区对象的最大任期阀值，即可经历minor gc(young gc)的次数，超过该次数的对象直接迁移到Old区；实际的TenuringThreshold由JVM通过Survivor Space的占用率和TargetSurvivorRatio动态计算，详情请查看参考资料。
 
