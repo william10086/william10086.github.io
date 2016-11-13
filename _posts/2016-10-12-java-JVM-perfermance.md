@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "JVM 性能优化"
-categories: java
+categories: Java
 tags:  JVM 性能优化
 ---
 

@@ -2,7 +2,7 @@
 layout: post
 title:  "Java 并发编程"
 categories: Java IO
-tags:   NIO
+tags:   Java Concurrency
 ---
 
 * content

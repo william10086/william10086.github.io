@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "JVM GC"
-categories: java
+categories: Java
 tags:  JVM GC 垃圾回收
 ---
 

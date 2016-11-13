@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "JVM 内存模型"
-categories: java
+categories: Java
 tags:  JVM memory
 ---
 
